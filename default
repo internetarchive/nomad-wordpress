@@ -3,8 +3,8 @@ server {
     server_name  _;
     root   /usr/share/nginx/html;
 
-    #charset koi8-r;
-    #access_log  /var/log/nginx/log/host.access.log  main;
+    access_log  /dev/stdout  main;
+    error_log   /dev/stderr;
 
     location / {
         index  index.php;
@@ -12,21 +12,9 @@ server {
 
     log_not_found off;
 
-    if ($host ~* ^www\.(.*))
-    {
-        set $host_without_www $1;
-        rewrite ^/(.*)$ $scheme://$host_without_www/$1 permanent;
-    }
-
-    if (!-e $request_filename)
-    {
+    if (!-e $request_filename) {
         rewrite ^(.+)$ /index.php last;
     }
-
-#    error_page   500 502 503 504  /50x.html;
-#    location = /50x.html {
-#        root   /usr/share/nginx/www;
-#    }
 
     location  ~ [^/]\.php(/|$) {
             fastcgi_buffer_size 128k;
@@ -48,4 +36,3 @@ server {
         deny  all;
     }
 }
-
