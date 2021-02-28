@@ -48,12 +48,9 @@ RUN apk add bash git nginx imagemagick-dev unzip wget php-curl php-gd php-intl p
     sed -i -e "s/^post_max_size.*/post_max_size = 10M/"             $INI && \
     sed -i -e "s/client_max_body_size 1m/client_max_body_size 10m/"  /etc/nginx/nginx.conf && \
     \
-    chown -R www-data.www-data . && \
-    \
-    mkdir -p /etc/nginx/sites-enabled && \
-    ln -s /etc/nginx/sites-available/default.conf /etc/nginx/http.d/default.conf
+    chown -R www-data.www-data .
 
-COPY default.conf /etc/nginx/lssites-available/default.conf
+COPY default.conf /etc/nginx/http.d/
 
 
 EXPOSE 5000
