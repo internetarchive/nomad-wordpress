@@ -32,9 +32,9 @@ RUN apt-get update  && \
 
 RUN chown -R www-data.www-data ${DOCUMENT_ROOT}
 
-COPY default /etc/nginx/sites-available/default
+COPY default.conf /etc/nginx/sites-available/default.conf
 RUN mkdir -p /etc/nginx/sites-enabled && \
-    ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+    ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/default.conf
 
 EXPOSE 5000
 
