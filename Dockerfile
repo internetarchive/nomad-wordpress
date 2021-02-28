@@ -6,9 +6,9 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV DOCUMENT_ROOT /usr/share/nginx/html
 
 RUN apt-get update  && \
-    apt-get -yqq install php-fpm unzip wget apt-utils php-curl php-gd php-intl php-pear php-imagick && \
-    apt-get -yqq install php-imap php-ps php-pspell php-recode php-tidy php-xmlrpc php-xsl && \
-    apt-get -yqq install php-memcache php-sqlite3  && \
+    apt-get -yqq install php-fpm unzip wget apt-utils php-curl php-gd php-intl php-pear php-imagick \
+                 php-imap php-ps php-pspell php-recode php-tidy php-xmlrpc php-xsl \
+                 php-memcache php-sqlite3  && \
     rm -rf ${DOCUMENT_ROOT}/*  && \
     # setup WP
     curl -s https://wordpress.org/latest.tar.gz | \
@@ -36,7 +36,6 @@ COPY default /etc/nginx/sites-available/default
 RUN mkdir -p /etc/nginx/sites-enabled && \
     ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 
-EXPOSE 80
-EXPOSE 443
+EXPOSE 5000
 
 CMD service php7.3-fpm start && nginx -g 'daemon off;'
