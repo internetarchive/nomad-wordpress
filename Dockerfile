@@ -9,8 +9,8 @@ WORKDIR           /usr/share/nginx/html
 # https://wordpress.org/plugins/memcached/#installation   xxx
 #   https://scotty-t.com/2012/01/20/wordpress-memcached/  xxx
 
-RUN apk add git nginx imagemagick-dev unzip wget php-curl php-gd php-intl php-pear \
-        php-imap php-pspell php-tidy php-xmlrpc php-xsl php-sqlite3 \
+RUN apk add bash git nginx imagemagick-dev unzip wget php-curl php-gd php-intl php-pear \
+        php-imap php-pspell php-tidy php-xmlrpc php-xsl php-sqlite3 && \
         # php-ps -- unavail but pretty sure dont need xxx
     # igbinary for php-memcache
     apk add php8-pecl-igbinary && \
