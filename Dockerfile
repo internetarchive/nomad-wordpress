@@ -29,7 +29,7 @@ RUN apt-get update  && \
     sed -i -e "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" /etc/php/*/fpm/pool.d/www.conf && \
     sed -i -e "s/;listen.mode = 0660/listen.mode = 0666/g"                     /etc/php/*/fpm/pool.d/www.conf  && \
     # https://wordpress.org/support/article/administration-over-ssl/#using-a-reverse-proxy
-    RUN sed -i -e "s|<?php|<?php define('FORCE_SSL_ADMIN',true); \$_SERVER['HTTPS']='on';|" wp-config.php && \
+    sed -i -e "s|<?php|<?php define('FORCE_SSL_ADMIN',true); \$_SERVER['HTTPS']='on';|" wp-config.php && \
     chown -R www-data.www-data .
 
 COPY default.conf /etc/nginx/sites-available/default.conf
