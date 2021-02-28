@@ -48,12 +48,14 @@ RUN apk add bash zsh git nginx imagemagick-dev unzip wget php-curl php-gd php-in
     sed -i -e "s/^post_max_size.*/post_max_size = 10M/"             $INI && \
     sed -i -e "s/client_max_body_size 1m/client_max_body_size 10m/"  /etc/nginx/nginx.conf && \
     # (weird:)
-    mkdir /run/nginx && \
+    mkdir -p /run/nginx && \
     \
     chown -R www-data.www-data . && \
     \
-    # wtf xxx
-    perl -i -pe 's/param\{([^}]+)\}/param[$1]/' /usr/share/nginx/html/wp-content/plugins/sqlite-integration/pdoengine.class.php
+    # gotta get compatible w/ php v8
+    PDO=/usr/share/nginx/html/wp-content/plugins/sqlite-integration/pdoengine.class.php && \
+    perl -i -pe 's/param\{([^}]+)\}/param[$1]/' $PDO && \
+    perl -i -pe 's/public function query.*/public function query(string \$query, ?int \$fetchMode = null, mixed ...\$fetchModeArgs) {/' $PDO
 
 COPY default.conf /etc/nginx/http.d/
 
