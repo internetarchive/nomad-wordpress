@@ -1,6 +1,9 @@
 FROM nginx
 LABEL maintainer="tracey <tracey AT archive DOT org>"
 
+ARG WP_SITEURL
+ENV WP_SITEURL $(WP_SITEURL)
+
 ENV DEBIAN_FRONTEND noninteractive
 
 ENV DOCUMENT_ROOT /usr/share/nginx/html
