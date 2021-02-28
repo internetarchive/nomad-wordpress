@@ -1,9 +1,6 @@
 FROM nginx
 LABEL maintainer="tracey <tracey AT archive DOT org>"
 
-ARG WP_SITEURL
-ENV WP_SITEURL ${WP_SITEURL}
-
 ENV DEBIAN_FRONTEND noninteractive
 
 ENV DOCUMENT_ROOT /usr/share/nginx/html
@@ -13,13 +10,12 @@ RUN apt-get update  && \
     apt-get -yqq install php-fpm unzip wget apt-utils php-curl php-gd php-intl php-pear php-imagick \
                  php-imap php-ps php-pspell php-recode php-tidy php-xmlrpc php-xsl \
                  php-memcache php-sqlite3  && \
-    rm -rf ${DOCUMENT_ROOT}/*  && \
+    rm -rf *  && \
     # setup WP
     curl -s https://wordpress.org/latest.tar.gz | tar xzf - --strip-components=1 && \
     # setup sqlite
-    curl -o sqlite-plugin.zip https://downloads.wordpress.org/plugin/sqlite-integration.1.7.zip && \
-      unzip sqlite-plugin.zip -d wp-content/plugins/ && \
-      rm sqlite-plugin.zip && \
+    curl -o sq.zip https://downloads.wordpress.org/plugin/sqlite-integration.1.8.1.zip && \
+      unzip sq.zip -d wp-content/plugins/  &&  rm sq.zip && \
     cp wp-content/plugins/sqlite-integration/db.php  wp-content && \
     cp wp-config-sample.php  wp-config.php && \
     # nginx config
