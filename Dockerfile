@@ -24,6 +24,7 @@ RUN apk add bash git nginx imagemagick-dev unzip wget php-curl php-gd php-intl p
     cd /tmp/php-memcached && phpize && ./configure && make -j4 && make install && \
     MEMD=/usr/local/lib/php/extensions/no-debug-non-zts-20200930 && \
     echo "extension=$MEMD/memcached.so" >| /usr/local/etc/php/conf.d/memcached.ini && \
+    rm -rf /tmp/php-memcached && \
     # logically php-imagick
     git clone https://github.com/Imagick/imagick.git /usr/src/php/ext/imagick && \
       docker-php-ext-install  imagick && \
@@ -39,23 +40,20 @@ RUN apk add bash git nginx imagemagick-dev unzip wget php-curl php-gd php-intl p
     cp wp-config-sample.php  wp-config.php && \
     # https://wordpress.org/support/article/administration-over-ssl/#using-a-reverse-proxy
     sed -i -e "s|<?php|<?php define('FORCE_SSL_ADMIN',true); \$_SERVER['HTTPS']='on';|" wp-config.php && \
-    # nginx config
-    sed -i -e "s/keepalive_timeout\s*65/keepalive_timeout 2/"                             /etc/nginx/nginx.conf && \
-    sed -i -e "s/keepalive_timeout 2/keepalive_timeout 2;\n\tclient_max_body_size 10m/"   /etc/nginx/nginx.conf && \
-    sed -i -e "s|include /etc/nginx/conf.d/\*.conf|include /etc/nginx/sites-enabled/\*|g" /etc/nginx/nginx.conf && \
+    # nginx and php-fpm config to allow up to 10MB file postings
     # php-fpm config
-    sed -i -e "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g"                 /etc/php/*/fpm/php.ini && \
-    sed -i -e "s/upload_max_filesize\s*=\s*2M/upload_max_filesize = 10M/g" /etc/php/*/fpm/php.ini && \
-    sed -i -e "s/post_max_size\s*=\s*8M/post_max_size = 10M/g"             /etc/php/*/fpm/php.ini && \
-    echo 'catch_workers_output = yes' >> /etc/php/*/fpm/pool.d/www.conf && \
-    echo 'listen.mode = 0666'         >> /etc/php/*/fpm/pool.d/www.conf && \
+    INI=/usr/local/etc/php/php.ini && \
+    cp /usr/local/etc/php/php.ini-production $INI && \
+    sed -i -e "s/^upload_max_filesize.*/upload_max_filesize = 10M/" $INI && \
+    sed -i -e "s/^post_max_size.*/post_max_size = 10M/"             $INI && \
+    sed -i -e "s/client_max_body_size 1m/client_max_body_size 10m/"  /etc/nginx/nginx.conf && \
     \
     chown -R www-data.www-data . && \
     \
     mkdir -p /etc/nginx/sites-enabled && \
-    ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/default.conf
+    ln -s /etc/nginx/sites-available/default.conf /etc/nginx/http.d/default.conf
 
-COPY default.conf /etc/nginx/sites-available/default.conf
+COPY default.conf /etc/nginx/lssites-available/default.conf
 
 
 EXPOSE 5000
