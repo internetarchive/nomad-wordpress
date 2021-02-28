@@ -9,8 +9,8 @@ WORKDIR           /usr/share/nginx/html
 # https://wordpress.org/plugins/memcached/#installation   xxx
 #   https://scotty-t.com/2012/01/20/wordpress-memcached/  xxx
 
-RUN apk add bash git nginx imagemagick-dev unzip wget php-curl php-gd php-intl php-pear \
-        php-imap php-pspell php-tidy php-xmlrpc php-xsl php-sqlite3 && \
+RUN apk add bash zsh git nginx imagemagick-dev unzip wget php-curl php-gd php-intl php-pear \
+        php-imap php-pspell php-tidy php-xmlrpc php-xsl php8-sqlite3 && \
         # php-ps -- unavail but pretty sure dont need xxx
     # igbinary for php-memcache
     apk add php8-pecl-igbinary && \
@@ -41,19 +41,23 @@ RUN apk add bash git nginx imagemagick-dev unzip wget php-curl php-gd php-intl p
     cp wp-config-sample.php  wp-config.php && \
     # https://wordpress.org/support/article/administration-over-ssl/#using-a-reverse-proxy
     sed -i -e "s|<?php|<?php define('FORCE_SSL_ADMIN',true); \$_SERVER['HTTPS']='on';|" wp-config.php && \
-    # nginx and php-fpm config to allow up to 10MB file postings
-    # php-fpm config
+    # config nginx and php-fpm to allow up to 10MB file postings
     INI=/usr/local/etc/php/php.ini && \
     cp /usr/local/etc/php/php.ini-production $INI && \
     sed -i -e "s/^upload_max_filesize.*/upload_max_filesize = 10M/" $INI && \
     sed -i -e "s/^post_max_size.*/post_max_size = 10M/"             $INI && \
     sed -i -e "s/client_max_body_size 1m/client_max_body_size 10m/"  /etc/nginx/nginx.conf && \
+    # (weird:)
+    mkdir /run/nginx && \
     \
-    chown -R www-data.www-data .
+    chown -R www-data.www-data . && \
+    \
+    # wtf xxx
+    perl -i -pe 's/param\{([^}]+)\}/param[$1]/' /usr/share/nginx/html/wp-content/plugins/sqlite-integration/pdoengine.class.php
 
 COPY default.conf /etc/nginx/http.d/
 
 
 EXPOSE 5000
 
-CMD service php7.3-fpm start && nginx -g 'daemon off;'
+CMD sh -c "php-fpm -D && nginx -g 'daemon off;'"
