@@ -24,6 +24,7 @@ RUN apk add bash git nginx imagemagick-dev unzip wget php-curl php-gd php-intl p
     cd /tmp/php-memcached && phpize && ./configure && make -j4 && make install && \
     MEMD=/usr/local/lib/php/extensions/no-debug-non-zts-20200930 && \
     echo "extension=$MEMD/memcached.so" >| /usr/local/etc/php/conf.d/memcached.ini && \
+    cd - && \
     rm -rf /tmp/php-memcached && \
     # logically php-imagick
     git clone https://github.com/Imagick/imagick.git /usr/src/php/ext/imagick && \
