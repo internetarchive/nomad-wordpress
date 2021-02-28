@@ -1,5 +1,6 @@
 variables:
   NOMAD_VAR_CHECK_PROTOCOL: 'tcp'
+  WP_SITEURL: 'https://internetarchive-wordpress.dev.archive.org/'
 
 include:
   - remote: 'https://gitlab.com/internetarchive/nomad/-/raw/master/.gitlab-ci.yml'
