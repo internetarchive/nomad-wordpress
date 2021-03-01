@@ -9,7 +9,9 @@ using:
 - php v8
 - sqlite3
 
-It starts out "blank" and you will want to visit the site and setup the admin account immediately.
+🚨 It starts out "blank" and you will want to visit the site and setup the admin account immediately.
+
+🚨 If you are not hosting over https with an ingress/edge router in front (that does https certs and termination - talking to you only over http) then you should remove these two statements near the top of `wp-config.php` and put in place via [fresh-install.sh](fresh-install.sh), line: `sed -i -e "s|<?php|<?php define('FORCE_SSL_ADMIN',true); \$_SERVER['HTTPS']='on';|" wp-config.php`.
 
 ### database files
 - `/usr/share/nginx/html/wp-content/database/.ht.sqlite` - main file

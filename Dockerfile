@@ -9,6 +9,8 @@ WORKDIR           /usr/share/nginx/html
 # https://wordpress.org/plugins/memcached/#installation   xxx
 #   https://scotty-t.com/2012/01/20/wordpress-memcached/  xxx
 
+COPY . /app
+
 RUN apk add bash zsh git nginx imagemagick-dev unzip wget php-curl php-gd php-intl php-pear \
         php-imap php-pspell php-tidy php-xmlrpc php-xsl php8-sqlite3 && \
         # php-ps -- unavail but pretty sure dont need xxx
@@ -29,18 +31,10 @@ RUN apk add bash zsh git nginx imagemagick-dev unzip wget php-curl php-gd php-in
     # logically php-imagick
     git clone https://github.com/Imagick/imagick.git /usr/src/php/ext/imagick && \
       docker-php-ext-install  imagick && \
-    # start docroot clean
-    rm -rf *  && \
+    #
     # setup WP
-    curl -s https://wordpress.org/latest.tar.gz | tar xzf - --strip-components=1 && \
-    # setup sqlite
-    curl -o sq.zip https://downloads.wordpress.org/plugin/sqlite-integration.1.8.1.zip && \
-      unzip sq.zip -d wp-content/plugins/  &&  rm sq.zip && \
-    cp wp-content/plugins/sqlite-integration/db.php  wp-content && \
-    # start with stock config
-    cp wp-config-sample.php  wp-config.php && \
-    # https://wordpress.org/support/article/administration-over-ssl/#using-a-reverse-proxy
-    sed -i -e "s|<?php|<?php define('FORCE_SSL_ADMIN',true); \$_SERVER['HTTPS']='on';|" wp-config.php && \
+    /app/fresh-install.sh && \
+    #
     # config nginx and php-fpm to allow up to 10MB file postings
     INI=/usr/local/etc/php/php.ini && \
     cp /usr/local/etc/php/php.ini-production $INI && \
@@ -49,17 +43,10 @@ RUN apk add bash zsh git nginx imagemagick-dev unzip wget php-curl php-gd php-in
     sed -i -e "s/client_max_body_size 1m/client_max_body_size 10m/"  /etc/nginx/nginx.conf && \
     # (weird:)
     mkdir -p /run/nginx && \
-    \
-    chown -R www-data.www-data . && \
-    \
-    # gotta get compatible w/ php v8
-    PDO=/usr/share/nginx/html/wp-content/plugins/sqlite-integration/pdoengine.class.php && \
-    perl -i -pe 's/param\{([^}]+)\}/param[$1]/' $PDO && \
-    perl -i -pe 's/public function query.*/public function query(string \$query, ?int \$fetchMode = null, mixed ...\$fetchModeArgs) {/' $PDO
-
-COPY default.conf /etc/nginx/http.d/
+    #
+    cp /app/default.conf /etc/nginx/http.d/
 
 
 EXPOSE 5000
 
-CMD sh -c "php-fpm -D && nginx -g 'daemon off;'"
+CMD /app/entrypoint.sh
