@@ -1,4 +1,5 @@
 variables:
+  NOMAD_VAR_PV: '{ pv4 = "/usr/share/nginx/html" }'
   NOMAD_VAR_CHECK_PROTOCOL: 'tcp'
 
 include:
