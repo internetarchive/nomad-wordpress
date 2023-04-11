@@ -1,6 +1,13 @@
 variables:
-  NOMAD_VAR_PERSISTENT_VOLUME: '/usr/share/nginx/html'
+  NOMAD_VAR_MULTI_CONTAINER: 'true'
+
+  NOMAD_VAR_COUNT: 1
+  NOMAD_VAR_COUNT_CANARIES: 0
+
+  NOMAD_VAR_PORTS: '{ 8080 = "http", 3306 = "db" }'
+
   NOMAD_VAR_CHECK_PROTOCOL: 'tcp'
+  NOMAD_VAR_HEALTH_TIMEOUT: '5m'
 
 include:
   - remote: 'https://gitlab.com/internetarchive/nomad/-/raw/master/.gitlab-ci.yml'

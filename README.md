@@ -1,35 +1,31 @@
-# WordPress
+# WordPress with Nomad
 
-## wordpress using sqlite (instead of mysql) and nginx - all in one container
+This sets up a blank WP blog, leveraging
+[HinD](https://github.com/internetarchive/hind)
+(Hashistack-IN-Docker)
 
-using:
-- alpine linux
-- php-fpm
-- nginx
-- php v8
-- sqlite3
+It deploys two containers in a single nomad `job`, one with `nginx` and `wordpress`, and a `mariadb` database container.
 
-🚨 It starts out "blank" and you will want to visit the site and setup the admin account immediately.
+# Unit testing of the two containers used
+- https://hub.docker.com/r/bitnami/wordpress-nginx
+- https://hub.docker.com/r/bitnami/mariadb
 
-🚨 If you are not hosting over https with an ingress/edge router in front (that does https certs and termination - talking to you only over http) then you should remove these two statements near the top of `wp-config.php` and put in place via [fresh-install.sh](fresh-install.sh), line: `sed -i -e "s|<?php|<?php define('FORCE_SSL_ADMIN',true); \$_SERVER['HTTPS']='on';|" wp-config.php`.
 
-### database files
-- `/usr/share/nginx/html/wp-content/database/.ht.sqlite` - main file
-- `/usr/share/nginx/html/wp-content/database/.ht.sqlite-journal` - during a large import
+```sh
+docker run --rm -it \
+  --net=host \
+  -e MARIADB_ROOT_PASSWORD=kimchi \
+  -e MARIADB_PASSWORD=kimchi \
+  -e MARIADB_DATABASE=bitnami_wordpress \
+  -e MARIADB_USER=wp_user \
+  docker.io/bitnami/mariadb
 
-### persistent data
-If you are deploying to Kubernetes, Nomad, docker-composer or similar - you should ensure this directory is using a [Persistent Volume](https://kubernetesbyexample.com/pv):
-- `/usr/share/nginx/html/`
-  - however, the only necessarily persistent 2 file/dirs are:
-    - `/usr/share/nginx/html/wp-config.php`
-    - `/usr/share/nginx/html/wp-content`
-      - includes sqlite DB file
-      - includes all themes and plugins
-- Local Storage is a good simple option that both [k3s](https://k3s.io/) and [nomad](https://gitlab.com/internetarchive/nomad) can use.
 
-### importing from another WP site
-- you can `tgz` up any non-public theme or plugin subfolders, and then `tar xzvf my-plugin.tgz` inside the `wp-content/themes/` or  `wp-content/plugins/` folders
-- you can export one or more `.xml` file using WordPress exporter
-- you can `zip` them for smaller sizes for import (there are often maximum post sizes)
-- import one or more `.xml` or `.xml.zip` files to your wordpress site, via the admin section [import] [wordpress], eg:
-https://HOSTNAME/wp-admin/admin.php?import=wordpress
+docker run --rm -it \
+  --net=host \
+  -e WORDPRESS_DATABASE_HOST=XXXX \
+  -e WORDPRESS_DATABASE_PORT_NUMBER=3306 \
+  -e WORDPRESS_DATABASE_PASSWORD=kimchi \
+  -e WORDPRESS_DATABASE_USER=wp_user \
+  bitnami/wordpress-nginx:6
+```
