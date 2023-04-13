@@ -1,4 +1,4 @@
-FROM bitnami/wordpress-nginx:6
+FROM bitnami/wordpress-nginx
 
 ENV WORDPRESS_DATABASE_USER wp_user
 
