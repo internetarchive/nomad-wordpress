@@ -7,7 +7,7 @@ variables:
   NOMAD_VAR_PORTS: '{ 8080 = "http", 3306 = "db" }'
 
   NOMAD_VAR_CHECK_PROTOCOL: 'tcp'
-  NOMAD_VAR_HEALTH_TIMEOUT: '5m'
+  NOMAD_VAR_HEALTH_TIMEOUT: '8m'
 
 include:
   - remote: 'https://gitlab.com/internetarchive/nomad/-/raw/master/.gitlab-ci.yml'
