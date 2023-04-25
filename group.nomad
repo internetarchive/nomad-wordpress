@@ -1,4 +1,4 @@
-task "NOMAD_VAR_SLUG-db" {
+task "db" {
   driver = "docker"
   lifecycle {
     sidecar = true
