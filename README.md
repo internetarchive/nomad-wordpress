@@ -29,4 +29,3 @@ docker run --rm -it \
   -e WORDPRESS_DATABASE_USER=wp_user \
   bitnami/wordpress-nginx:6
 ```
-
