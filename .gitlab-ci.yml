@@ -7,7 +7,17 @@ variables:
   NOMAD_VAR_PORTS: '{ 8080 = "http", 3306 = "db" }'
 
   NOMAD_VAR_CHECK_PROTOCOL: 'tcp'
-  NOMAD_VAR_HEALTH_TIMEOUT: '8m'
+
+  # first bring up takes a long time, copying initial site & data to persist, to our slow PV
+  NOMAD_VAR_HEALTH_TIMEOUT: '5m'
+
+  NOMAD_VAR_PERSISTENT_VOLUME: '/bitnami/wordpress/'
 
 include:
   - remote: 'https://gitlab.com/internetarchive/nomad/-/raw/master/.gitlab-ci.yml'
+
+build:
+  stage: build
+
+  # kill docker-in-docker
+  services:
