@@ -15,7 +15,6 @@ CMD \
   export WORDPRESS_DATABASE_PORT_NUMBER=$(echo "${NOMAD_ADDR_db?}" | cut -f2 -d:) && \
   #
   # Need to ensure HOSTNAME:PORT value is accurate
-  perl -i -pe "s/'DB_HOST'.*/'DB_HOST', '${NOMAD_ADDR_db?}');/" /bitnami/wordpress/wp-config.php && \
-  fgrep DB_HOST /bitnami/wordpress/wp-config.php && \
+  ( perl -i -pe "s/'DB_HOST'.*/'DB_HOST', '${NOMAD_ADDR_db?}');/" /bitnami/wordpress/wp-config.php || echo bootstrapping ) && \
   #
   /opt/bitnami/scripts/wordpress/entrypoint.sh  /opt/bitnami/scripts/nginx-php-fpm/run.sh
