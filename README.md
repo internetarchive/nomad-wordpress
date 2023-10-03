@@ -12,6 +12,7 @@ It deploys two containers in a single nomad `job`, one with `nginx` and `wordpre
 
 
 ```sh
+# fake passwords ;-)
 docker run --rm -it \
   --net=host \
   -e MARIADB_ROOT_PASSWORD=kimchi \
