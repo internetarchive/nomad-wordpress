@@ -5,7 +5,8 @@ task "db" {
     hook = "prestart"
   }
   config {
-    image = "docker.io/bitnami/mariadb"
+    # future versions can make bootstrap user setup from WP container challenging, tracey 9/2023
+    image = "docker.io/bitnami/mariadb:11.0.3"
     ports = ["db"]
     volumes = ["/pv/${var.CI_PROJECT_PATH_SLUG}-db:/bitnami/mariadb"]
   }
