@@ -10,6 +10,8 @@ It deploys two containers in a single nomad `job`, one with `nginx` and `wordpre
 - https://hub.docker.com/r/bitnami/wordpress-nginx
 - https://hub.docker.com/r/bitnami/mariadb
 
+## Startup help
+- https://wordpress.org/documentation/article/reset-your-password/#through-mysql-command-line
 
 ```sh
 # fake passwords ;-)
