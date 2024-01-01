@@ -44,6 +44,7 @@ chmod 777 /pv/${var.CI_PROJECT_PATH_SLUG};
 mkdir -p  /pv/${var.CI_PROJECT_PATH_SLUG}/wp-content/themes;
 chmod 777 /pv/${var.CI_PROJECT_PATH_SLUG}/wp-content/themes;
 chmod ugo+rwX -R /pv/${var.CI_PROJECT_PATH_SLUG}/wp-content/plugins;
+exit 0;
 EOF
     ]
   }
