@@ -27,7 +27,7 @@ EOH
 task "perms" {
   driver = "raw_exec"
   lifecycle {
-    sidecar = true
+    sidecar = false
     hook = "prestart"
   }
   config {
