@@ -35,15 +35,15 @@ task "perms" {
     command = "sh"
     args    = [
       "-c",
-      "\n
-mkdir -p  /pv/${var.CI_PROJECT_PATH_SLUG}-db; \n
-chmod 777 /pv/${var.CI_PROJECT_PATH_SLUG}-db; \n
-mkdir -p  /pv/${var.CI_PROJECT_PATH_SLUG}; \n
-chmod 777 /pv/${var.CI_PROJECT_PATH_SLUG}; \n
-mkdir -p  /pv/${var.CI_PROJECT_PATH_SLUG}/wp-content/themes; \n
-chmod 777 /pv/${var.CI_PROJECT_PATH_SLUG}/wp-content/themes; \n
-chmod ugo+rwX -R /pv/${var.CI_PROJECT_PATH_SLUG}/wp-content/plugins; \n
-      "
+<<EOF
+mkdir -p  /pv/${var.CI_PROJECT_PATH_SLUG}-db;
+chmod 777 /pv/${var.CI_PROJECT_PATH_SLUG}-db;
+mkdir -p  /pv/${var.CI_PROJECT_PATH_SLUG};
+chmod 777 /pv/${var.CI_PROJECT_PATH_SLUG};
+mkdir -p  /pv/${var.CI_PROJECT_PATH_SLUG}/wp-content/themes;
+chmod 777 /pv/${var.CI_PROJECT_PATH_SLUG}/wp-content/themes;
+chmod ugo+rwX -R /pv/${var.CI_PROJECT_PATH_SLUG}/wp-content/plugins;
+EOF
     ]
   }
 }
