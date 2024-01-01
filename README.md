@@ -6,17 +6,20 @@ This sets up a blank WP blog, leveraging
 
 It deploys two containers in a single nomad `job`, one with `nginx` and `wordpress`, and a `mariadb` database container.
 
-# Unit testing of the two containers used
-- https://hub.docker.com/r/bitnami/wordpress-nginx
-- https://hub.docker.com/r/bitnami/mariadb
-
 ## Startup help
-- https://wordpress.org/documentation/article/reset-your-password/#through-wp-cli
+To login from the website and do final setup, the easiest way is from https://wordpress.org/documentation/article/reset-your-password/#through-wp-cli
+
+ssh into your main container (non DB) deployment container then:
+```sh
+wp user list
+wp user update 1 --user_pass=$MARIADB_PASSWORD
+```
 
 Once you've updated the user password on the back-end, you should be able to login via the
 /wp-admin
-URL and update WP version, plugins, themes, etc.
+URL and update any WP version, plugins, themes, etc.
 
+You can also upgrade WP on the backend via ssh into the main container via:
 ```sh
 wp core update
 ```
@@ -25,13 +28,10 @@ wp core update
   the running wordpress/nginx container.  (see [.bashrc](.bashrc))
 
 
-```sh
-chmod ugo+rwX -R /opt/bitnami/wordpress/wp-content/plugins/
-mkdir -p -m777 /opt/bitnami/wordpress/wp-content/themes
-chmod 777      /opt/bitnami/wordpress/wp-content/themes
-```
+## Unit testing of the two containers used
+- https://hub.docker.com/r/bitnami/wordpress-nginx
+- https://hub.docker.com/r/bitnami/mariadb
 
-## Startup issues still?
 Starting from scratch w/ a `nomad` deploy and two containers doing a "dance" to get each bootstrapped can sometimes be a pain.
 If they don't eventually start up, you may want to fire up 2 containers manually to get a proper setup,
 using passed in "Persistent Volumes" for the DB & config setup to persist.
