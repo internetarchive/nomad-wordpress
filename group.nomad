@@ -34,15 +34,16 @@ task "perms" {
     # setup a few dirs we need
     command = "sh"
     args    = [
-      "-c",
+      "-cx",
 <<EOF
-mkdir -p  /pv/${var.CI_PROJECT_PATH_SLUG}-db;
-chmod 777 /pv/${var.CI_PROJECT_PATH_SLUG}-db;
-mkdir -p  /pv/${var.CI_PROJECT_PATH_SLUG};
-chmod 777 /pv/${var.CI_PROJECT_PATH_SLUG};
-mkdir -p  /pv/${var.CI_PROJECT_PATH_SLUG}/wp-content/themes;
-chmod 777 /pv/${var.CI_PROJECT_PATH_SLUG}/wp-content/themes;
-chmod ugo+rwX -R /pv/${var.CI_PROJECT_PATH_SLUG}/wp-content/plugins;
+whoami;
+sudo mkdir -p  /pv/${var.CI_PROJECT_PATH_SLUG}-db;
+sudo chmod 777 /pv/${var.CI_PROJECT_PATH_SLUG}-db;
+sudo mkdir -p  /pv/${var.CI_PROJECT_PATH_SLUG};
+sudo chmod 777 /pv/${var.CI_PROJECT_PATH_SLUG};
+sudo mkdir -p  /pv/${var.CI_PROJECT_PATH_SLUG}/wp-content/themes;
+sudo chmod 777 /pv/${var.CI_PROJECT_PATH_SLUG}/wp-content/themes;
+sudo chmod ugo+rwX -R /pv/${var.CI_PROJECT_PATH_SLUG}/wp-content/plugins;
 EOF
     ]
   }
