@@ -18,7 +18,7 @@ task "db" {
 MYSQL_DATABASE=demo-db
 MYSQL_USER=demo-user
 MYSQL_RANDOM_ROOT_PASSWORD=1
-MYSQL_PASSWORD={{ key "WORDPRESS_DB_PASSWORD"}}
+MYSQL_PASSWORD={{ env "WORDPRESS_DB_PASSWORD"}}
 EOH
     destination = "secrets/file.env"
     env         = true
