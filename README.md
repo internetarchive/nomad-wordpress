@@ -6,6 +6,8 @@ This sets up a blank WP blog, leveraging
 
 It deploys two containers in a single nomad `job`, one with `nginx` and `wordpress`, and a `mariadb` database container.
 
+xxxx 2025/11 migrating from bitnami to wordpress official + `mysql` docker images.
+
 ## Startup help
 To login from the website and do final setup, the easiest way is from https://wordpress.org/documentation/article/reset-your-password/#through-wp-cli
 
