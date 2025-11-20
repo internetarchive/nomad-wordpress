@@ -15,5 +15,5 @@ jobs:
       NO_TEST: true
       BASE_DOMAIN: ux-b.archive.org
     secrets:
-      WORDPRESS_DB_PASSWORD: ${{ secrets.PW }}
+      NOMAD_SECRETS: '{ "WORDPRESS_DB_PASSWORD"="${{ secrets.PW }}" }'
       NOMAD_TOKEN: ${{ secrets.NOMAD_TOKEN }}
