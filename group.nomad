@@ -10,7 +10,8 @@ task "db" {
     volumes = ["/pv/${var.CI_PROJECT_PATH_SLUG}-db:/var/lib/mysql"]
   }
 
-  template { # xxxx
+  # xxx
+  template {
     data = <<EOH
 {{key "NOMAD_VAR_SLUG"}}
 
