@@ -12,9 +12,7 @@ ENV WORDPRESS_DB_NAME=demo-db
 COPY .bashrc /
 
 CMD \
-  export WORDPRESS_DB_HOST=$(       echo "${NOMAD_ADDR_db?}" | cut -f1 -d:) && \
-  export WORDPRESS_DB_PORT=$(echo "${NOMAD_ADDR_db?}" | cut -f2 -d:) && \
-  export WORDPRESS_DB_PORT_NUMBER=$(echo "${NOMAD_ADDR_db?}" | cut -f2 -d:) && \
+  export WORDPRESS_DB_HOST=$NOMAD_ADDR_db && \
   #
   # Need to ensure HOSTNAME:PORT value is accurate
   # ( perl -i -pe "s/'DB_HOST'.*/'DB_HOST', '${NOMAD_ADDR_db?}');/" /bitnami/wordpress/wp-config.php || echo bootstrapping ) && \
