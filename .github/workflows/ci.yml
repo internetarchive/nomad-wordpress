@@ -14,8 +14,8 @@ jobs:
       NOMAD_VAR_PERSISTENT_VOLUME: '/var/www/html'
       NO_TEST: true
       BASE_DOMAIN: ux-b.archive.org
-      WORDPRESS_DB_USER: demo-user
-      WORDPRESS_DB_NAME: demo-db
+      WORDPRESS_DB_USER: 'demo-user'
+      WORDPRESS_DB_NAME: 'demo-db'
     secrets:
       WORDPRESS_DB_PASSWORD: ${{ secrets.PW }}
       NOMAD_TOKEN: ${{ secrets.NOMAD_TOKEN }}
