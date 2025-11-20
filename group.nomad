@@ -25,25 +25,23 @@ EOH
 
 
 task "perms" {
-  driver = "raw_exec"
+  driver = "docker"
   lifecycle {
     sidecar = false
     hook = "prestart"
   }
   config {
     # setup a few dirs we need
+    image = "alpine"
+    volumes = ["/pv/${var.CI_PROJECT_PATH_SLUG}:/pv"]
     command = "sh"
     args    = [
       "-cx",
 <<EOF
 set +e;
-mkdir -p  /pv/${var.CI_PROJECT_PATH_SLUG}-db;
-chmod 777 /pv/${var.CI_PROJECT_PATH_SLUG}-db;
-mkdir -p  /pv/${var.CI_PROJECT_PATH_SLUG};
-chmod 777 /pv/${var.CI_PROJECT_PATH_SLUG};
-mkdir -p  /pv/${var.CI_PROJECT_PATH_SLUG}/wp-content/themes;
-chmod 777 /pv/${var.CI_PROJECT_PATH_SLUG}/wp-content/themes;
-chmod ugo+rwX -R /pv/${var.CI_PROJECT_PATH_SLUG}/wp-content/plugins;
+mkdir -p  /pv/wp-content/themes;
+chmod 777 /pv/wp-content/themes;
+chmod ugo+rwX -R /pv/wp-content/plugins;
 exit 0;
 EOF
     ]
