@@ -4,10 +4,10 @@ function sql() {
   local PO=$(echo "$NOMAD_ADDR_db" | cut -f2 -d:)
 
   [ "$#" = 0 ] && \
-    mysql -u$WORDPRESS_DATABASE_USER -p$MARIADB_PASSWORD -h$HO -P$PO  bitnami_wordpress
+    mysql -u$WORDPRESS_DB_USER -p$WORDPRESS_DB_PASSWORD -h$HO -P$PO  $WORDPRESS_DB_NAME
 
 	[ "$#" = 0 ] || echo "$@" | \
-    mysql -u$WORDPRESS_DATABASE_USER -p$MARIADB_PASSWORD -h$HO -P$PO  bitnami_wordpress
+    mysql -u$WORDPRESS_DB_USER -p$WORDPRESS_DB_PASSWORD -h$HO -P$PO  $WORDPRESS_DB_NAME
 }
 
 function lt() {

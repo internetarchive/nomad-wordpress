@@ -25,26 +25,26 @@ EOH
 }
 
 
-task "perms" {
-  driver = "docker"
-  lifecycle {
-    sidecar = false
-    hook = "prestart"
-  }
-  config {
-    # setup a few dirs we need
-    image = "alpine"
-    volumes = ["/pv/${var.CI_PROJECT_PATH_SLUG}:/pv"]
-    command = "sh"
-    args    = [
-      "-cx",
-<<EOF
-set +e;
-echo xxxx mkdir -p  /pv/wp-content/themes;
-echo xxxx chmod 777 /pv/wp-content/themes;
-echo xxxx chmod ugo+rwX -R /pv/wp-content/plugins;
-exit 0;
-EOF
-    ]
-  }
-}
+# task "perms" {
+#   driver = "docker"
+#   lifecycle {
+#     sidecar = false
+#     hook = "prestart"
+#   }
+#   config {
+#     # setup a few dirs we need
+#     image = "alpine"
+#     volumes = ["/pv/${var.CI_PROJECT_PATH_SLUG}:/pv"]
+#     command = "sh"
+#     args    = [
+#       "-cx",
+# <<EOF
+# set +e;
+# mkdir -p  /pv/wp-content/themes;
+# chmod 777 /pv/wp-content/themes;
+# chmod ugo+rwX -R /pv/wp-content/plugins;
+# exit 0;
+# EOF
+#     ]
+#   }
+# }
