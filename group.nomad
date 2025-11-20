@@ -8,6 +8,7 @@ task "db" {
     image = "mysql:8.0"
     ports = ["db"]
     volumes = ["/pv/${var.CI_PROJECT_PATH_SLUG}-db:/var/lib/mysql-xxxx"]
+    tmpfs = ["/tmp", "/run"]
   }
 
   # xxx
