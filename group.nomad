@@ -5,18 +5,19 @@ task "db" {
     hook = "prestart"
   }
   config {
-    # future versions can make bootstrap user setup from WP container challenging, tracey 9/2023
-    image = "docker.io/bitnami/mariadb:11.0.3"
+    image = "mysql:8.0"
     ports = ["db"]
-    volumes = ["/pv/${var.CI_PROJECT_PATH_SLUG}-db:/bitnami/mariadb"]
+    volumes = ["/pv/${var.CI_PROJECT_PATH_SLUG}-db:/var/lib/mysql"]
   }
 
-  template {
+  template { # xxxx
     data = <<EOH
 {{key "NOMAD_VAR_SLUG"}}
 
-MARIADB_DATABASE=bitnami_wordpress
-MARIADB_USER=wp_user
+MYSQL_DATABASE=demo-db
+MYSQL_USER=demo-user
+MYSQL_RANDOM_ROOT_PASSWORD=1
+MYSQL_PASSWORD={{ key "WORDPRESS_DB_PASSWORD"}}
 EOH
     destination = "secrets/file.env"
     env         = true
@@ -39,9 +40,9 @@ task "perms" {
       "-cx",
 <<EOF
 set +e;
-mkdir -p  /pv/wp-content/themes;
-chmod 777 /pv/wp-content/themes;
-chmod ugo+rwX -R /pv/wp-content/plugins;
+echo xxxx mkdir -p  /pv/wp-content/themes;
+echo xxxx chmod 777 /pv/wp-content/themes;
+echo xxxx chmod ugo+rwX -R /pv/wp-content/plugins;
 exit 0;
 EOF
     ]

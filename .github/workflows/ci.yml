@@ -1,18 +1,21 @@
 on: push
 jobs:
   cicd:
+    # https://github.com/internetarchive/cicd
     uses: internetarchive/cicd/.github/workflows/cicd.yml@main
     with:
       NOMAD_VAR_MULTI_CONTAINER: 'true'
-
       NOMAD_VAR_COUNT: 1
       NOMAD_VAR_COUNT_CANARIES: 0
-
       NOMAD_VAR_PORTS: '{ 8080 = "http", 3306 = "db" }'
-
       NOMAD_VAR_CHECK_PROTOCOL: 'tcp'
-
       # first bring up takes a long time, copying initial site & data to persist, to our slow PV
       NOMAD_VAR_HEALTH_TIMEOUT: '9m'
-
-      NOMAD_VAR_PERSISTENT_VOLUME: '/bitnami/wordpress/'
+      NOMAD_VAR_PERSISTENT_VOLUME: '/var/www/html'
+      NO_TEST: true
+      BASE_DOMAIN: ux-b.archive.org
+      WORDPRESS_DB_USER: demo-user
+      WORDPRESS_DB_NAME: demo-db
+    secrets:
+      WORDPRESS_DB_PASSWORD: ${{ secrets.PW }}
+      NOMAD_TOKEN: ${{ secrets.NOMAD_TOKEN }}
