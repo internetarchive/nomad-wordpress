@@ -17,7 +17,7 @@ task "db" {
     command = "sh"
     args = [
       "-c",
-      "/usr/local/bin/docker-entrypoint.sh mysqld || ( cat /var/lib/mysql/*err; sleep 300 )"
+      "/usr/local/bin/docker-entrypoint.sh mysqld; echo FAIL WHALE; cat /var/lib/mysql/*err; sleep 300"
       # "/usr/local/bin/docker-entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password || sleep 300"
       # "exec /usr/local/bin/docker-entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password"
     ]
