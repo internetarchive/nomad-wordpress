@@ -16,5 +16,5 @@ jobs:
       BASE_DOMAIN: x.archive.org
       # BASE_DOMAIN: ux-b.archive.org
     secrets:
-      NOMAD_SECRETS: '{ "WORDPRESS_DB_PASSWORD"="${{ secrets.PW }}" }'
+      NOMAD_SECRETS: '{ "WORDPRESS_DB_PASSWORD"="${{ secrets.PW }}", "MYSQL_PASSWORD"="${{ secrets.PW }}" }'
       NOMAD_TOKEN: ${{ secrets.NOMAD_TOKEN }}
