@@ -1,6 +1,8 @@
 FROM wordpress
 
-ENV WORDPRESS_DATABASE_USER wp_user
+
+ENV WORDPRESS_DB_USER=demo-user
+ENV WORDPRESS_DB_NAME=demo-db
 
 # We're going to serve wordpress on http:// from our container (to caddy/haproxy/LB)
 # but we need the site itself to issue https:// links on its own pages to the browser
