@@ -8,7 +8,17 @@ task "db" {
     image = "mysql:8.0"
     ports = ["db"]
     volumes = ["/pv/${var.CI_PROJECT_PATH_SLUG}-db:/var/lib/mysql-xxxx"]
-    tmpfs = ["/tmp", "/run"]
+
+
+    # workaround a nomad orchestration of mysql container issue with mysql container use of
+    # 'ioctl' for 'autodetection of TTY or not?' on startup
+    tty = true
+    # tmpfs = ["/tmp", "/run"]
+    command = "sh"
+    args = [
+      "-c",
+      "exec /usr/local/bin/docker-entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password"
+    ]
   }
 
   # xxx
