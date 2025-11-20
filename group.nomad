@@ -7,7 +7,7 @@ task "db" {
   config {
     image = "mysql:8.0"
     ports = ["db"]
-    volumes = ["/pv/${var.CI_PROJECT_PATH_SLUG}-db:/var/lib/mysql"]
+    volumes = ["/pv/${var.CI_PROJECT_PATH_SLUG}-db:/var/lib/mysql-xxxx"]
   }
 
   # xxx
