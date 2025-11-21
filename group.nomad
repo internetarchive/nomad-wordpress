@@ -1,3 +1,7 @@
+#
+# PREREQUISITES!
+# sudo mkdir -p -m777 /pv/internetarchive-nomad-wordpress-db
+#
 task "db" {
   driver = "docker"
   lifecycle {
@@ -8,7 +12,6 @@ task "db" {
     image = "mysql:8.0"
     ports = ["db"]
     volumes = ["/pv/${var.CI_PROJECT_PATH_SLUG}-db:/var/lib/mysql"] # xxxx
-
 
     # workaround a nomad orchestration of mysql container issue with mysql container use of
     # 'ioctl' for 'autodetection of TTY or not?' on startup

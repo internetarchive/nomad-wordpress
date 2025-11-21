@@ -13,8 +13,7 @@ jobs:
       NOMAD_VAR_HEALTH_TIMEOUT: '9m'
       NOMAD_VAR_PERSISTENT_VOLUME: '/var/www/html'
       NO_TEST: true
-      BASE_DOMAIN: x.archive.org
-      # BASE_DOMAIN: ux-b.archive.org # xxxx
+      BASE_DOMAIN: ux-b.archive.org
       # NOMAD_VAR_PORTS: '{ -1 = "http", -1 = "db" }' # xxxx
       # NOMAD_VAR_NETWORK_MODE: 'host' # xxxx
 
