@@ -15,12 +15,36 @@ task "db" {
     tty = true
     tmpfs = ["/tmp", "/run"]
     command = "sh"
+
     args = [
       "-c",
-      "/usr/local/bin/docker-entrypoint.sh mysqld; echo FAIL WHALE; cat /var/lib/mysql/*err; sleep 300"
+      <<EOF
+# Initialize DB if needed
+if [ ! -d "/var/lib/mysql/mysql" ]; then
+  mysqld --initialize-insecure --user=mysql --datadir=/var/lib/mysql
+fi
+
+# Start mysqld directly (no entrypoint wrapper)
+exec mysqld \
+  --user=mysql \
+  --datadir=/var/lib/mysql \
+  --default-authentication-plugin=mysql_native_password \
+  --init-file=<(cat <<EOSQL
+CREATE DATABASE IF NOT EXISTS demo-db;
+CREATE USER IF NOT EXISTS 'demo-user'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
+GRANT ALL PRIVILEGES ON demo-db.* TO 'demo-user'@'%';
+FLUSH PRIVILEGES;
+EOSQL
+)
+EOF
+    ]
+
+#    args = [
+#      "-c",
+#      "/usr/local/bin/docker-entrypoint.sh mysqld; echo FAIL WHALE; cat /var/lib/mysql/*err; sleep 300"
       # "/usr/local/bin/docker-entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password || sleep 300"
       # "exec /usr/local/bin/docker-entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password"
-    ]
+#    ]
   }
 
   # xxx
