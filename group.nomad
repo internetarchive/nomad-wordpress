@@ -14,28 +14,30 @@ task "db" {
     # 'ioctl' for 'autodetection of TTY or not?' on startup
     tty = true
     tmpfs = ["/tmp", "/run"]
-    command = "sh"
-
+    command = "bash"
     args = [
       "-c",
       <<EOF
 # Initialize DB if needed
 if [ ! -d "/var/lib/mysql/mysql" ]; then
+  echo "Initializing MySQL data directory..."
   mysqld --initialize-insecure --user=mysql --datadir=/var/lib/mysql
 fi
 
-# Start mysqld directly (no entrypoint wrapper)
+# Create init SQL file
+cat > /tmp/init.sql <<EOSQL
+CREATE DATABASE IF NOT EXISTS \`demo-db\`;
+CREATE USER IF NOT EXISTS 'demo-user'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
+GRANT ALL PRIVILEGES ON \`demo-db\`.* TO 'demo-user'@'%';
+FLUSH PRIVILEGES;
+EOSQL
+
+# Start mysqld
 exec mysqld \
   --user=mysql \
   --datadir=/var/lib/mysql \
   --default-authentication-plugin=mysql_native_password \
-  --init-file=<(cat <<EOSQL
-CREATE DATABASE IF NOT EXISTS demo-db;
-CREATE USER IF NOT EXISTS 'demo-user'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
-GRANT ALL PRIVILEGES ON demo-db.* TO 'demo-user'@'%';
-FLUSH PRIVILEGES;
-EOSQL
-)
+  --init-file=/tmp/init.sql
 EOF
     ]
 
