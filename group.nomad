@@ -1,6 +1,6 @@
 #
 # PREREQUISITES!
-# sudo mkdir -p -m777 /pv/internetarchive-nomad-wordpress-db
+# sudo mkdir -p -m777  /pv/internetarchive-nomad-wordpress  /pv/internetarchive-nomad-wordpress-db
 #
 task "db" {
   driver = "docker"
