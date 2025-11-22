@@ -16,12 +16,11 @@ task "db" {
   config {
     image = "mysql:8.0"
     ports = ["db"]
-    volumes = ["/pv/${var.CI_PROJECT_PATH_SLUG}-db:/var/lib/mysql"] # xxxx
+    volumes = ["/pv/${var.CI_PROJECT_PATH_SLUG}-db:/var/lib/mysql"]
 
-    # workaround a nomad orchestration of mysql container issue with mysql container use of
-    # 'ioctl' for 'autodetection of TTY or not?' on startup
-    tty = true
-    tmpfs = ["/tmp", "/run"]
+    # Workaround a nomad orchestration of mysql container issue with mysql container use of
+    # 'ioctl' for 'autodetection of TTY or not?' on startup.
+    # So we'll just do the init ourselves, when needed, and then do the normal mysqld start.
     command = "bash"
     args = [
       "-c",
@@ -48,16 +47,8 @@ exec mysqld \
   --init-file=/tmp/init.sql
 EOF
     ]
-
-#    args = [
-#      "-c",
-#      "/usr/local/bin/docker-entrypoint.sh mysqld; echo FAIL WHALE; cat /var/lib/mysql/*err; sleep 300"
-      # "/usr/local/bin/docker-entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password || sleep 300"
-      # "exec /usr/local/bin/docker-entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password"
-#    ]
   }
 
-  # xxx
   template {
     data = <<EOH
 {{key "NOMAD_VAR_SLUG"}}

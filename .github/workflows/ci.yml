@@ -9,14 +9,11 @@ jobs:
       NOMAD_VAR_COUNT_CANARIES: 0
       NOMAD_VAR_PORTS: '{ 80 = "http", 3306 = "db" }'
       NOMAD_VAR_CHECK_PROTOCOL: 'tcp'
-      # first bring up takes a long time, copying initial site & data to persist, to our slow PV
+      # first bringup takes awhile, initing site & data & copying into Persistent Volumes, etc.
       NOMAD_VAR_HEALTH_TIMEOUT: '9m'
       NOMAD_VAR_PERSISTENT_VOLUME: '/var/www/html'
       NO_TEST: true
       BASE_DOMAIN: ux-b.archive.org
-      # NOMAD_VAR_PORTS: '{ -1 = "http", -1 = "db" }' # xxxx
-      # NOMAD_VAR_NETWORK_MODE: 'host' # xxxx
-
     secrets:
       NOMAD_SECRETS: '{ "WORDPRESS_DB_PASSWORD"="${{ secrets.PW }}", "MYSQL_PASSWORD"="${{ secrets.PW }}" }'
       NOMAD_TOKEN: ${{ secrets.NOMAD_TOKEN }}
