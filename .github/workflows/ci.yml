@@ -7,7 +7,6 @@ jobs:
       NOMAD_VAR_MULTI_CONTAINER: 'true'
       NOMAD_VAR_COUNT: 1
       NOMAD_VAR_COUNT_CANARIES: 0
-      NOMAD_VAR_MEMORY: 2048
       NOMAD_VAR_PORTS: '{ 80 = "http", 3306 = "db" }'
       NOMAD_VAR_CHECK_PROTOCOL: 'tcp'
       # first bring up takes a long time, copying initial site & data to persist, to our slow PV

@@ -8,6 +8,11 @@ task "db" {
     sidecar = true
     hook = "prestart"
   }
+  resources {
+    cpu        = 500
+    memory     = 2048 # 2GB RAM big limit esp. for initial DB setup
+    memory_max = 8000 # hard limit
+  }
   config {
     image = "mysql:8.0"
     ports = ["db"]
